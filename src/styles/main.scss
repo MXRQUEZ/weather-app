@@ -1,0 +1,85 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+html {
+  font-family: Arial, serif;
+  font-size: 130%;
+}
+
+body {
+  background:
+          url("https://cdn.discordapp.com/attachments/631923587078422558/967127799271919636/3670bb6677732701df6bb7dbd6504024.jpg")
+            no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  overflow-y: hidden;
+  font-size: 130%;
+  font-weight: 300;
+  line-height: 1.55em;
+  text-rendering: optimizeLegibility;
+  color: #555;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: white;
+  font-family: Calibri, serif;
+  font-weight: 800;
+  text-rendering: optimizeLegibility;
+}
+
+h1 {
+  font-size: 170%;
+  margin: 0.5em;
+  line-height: 1.4em;
+  text-align: center;
+}
+
+h2 {
+  font-size: 150%;
+  margin: 0.5em;
+  line-height: 1.4em;
+}
+
+h3 {
+  font-size: 130%;
+  margin: 0.5em;
+  line-height: 1.4em;
+}
+
+h4 {
+  font-size: 110%;
+  margin: 0.5em;
+  line-height: 1.4em;
+}
+
+h5 {
+  font-size: 100%;
+  margin: 0.5em;
+  line-height: 1.4em;
+}
+
+h6 {
+  font-size: 90%;
+  margin: 0.5em;
+  line-height: 1.4em;
+}
+
+p {
+  color: white;
+  margin: 10px 10px;
+}
