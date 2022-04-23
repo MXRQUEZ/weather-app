@@ -17,18 +17,28 @@ interface IPicture {
 export const picture: IPicture = {
   sun: {
     background:
-      "https://catherineasquithgallery.com/uploads/posts/2021-02/1613122881_14-p-fon-oduvanchiki-zheltie-17.jpg",
+      "https://kartinkin.net/uploads/posts/2021-07/1627512332_30-kartinkin-com-p-step-tekstura-krasivo-32.png",
     icon: "wi wi-day-sunny",
   },
   rain: {
     background:
-      "https://wallup.net/wp-content/uploads/2016/01/260109-city-road-rain-wet-depth_of_field-lights-car-night-trees-worms_eye_view-shiny.jpg",
+      "https://downloadhdwallpapers.in/wp-content/uploads/2017/12/Road-2560x1440.jpg",
     icon: "wi wi-rain",
   },
   clouds: {
     background:
       "https://funart.pro/uploads/posts/2021-04/1617460155_13-p-oboi-grozovoi-front-13.jpg",
     icon: "wi wi-cloudy",
+  },
+  clear: {
+    background:
+      "https://2.bp.blogspot.com/-mNNbM13xGUY/WMDBbKOwmPI/AAAAAAAAAJk/uajtbKQApGIeUfOy5o4NcUZ0YjIRxDAuACEw/s1600/Field%2Band%2Bsky_30.jpg",
+    icon: "wi wi-cloud",
+  },
+  fog: {
+    background:
+      "https://wallup.net/wp-content/uploads/2016/01/260109-city-road-rain-wet-depth_of_field-lights-car-night-trees-worms_eye_view-shiny.jpg",
+    icon: "wi wi-day-fog",
   },
 };
 

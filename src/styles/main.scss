@@ -18,10 +18,11 @@ html {
 
 body {
   background:
-          url("https://cdn.discordapp.com/attachments/631923587078422558/967127799271919636/3670bb6677732701df6bb7dbd6504024.jpg")
-            no-repeat center center fixed;
+          url("https://kartinkin.net/uploads/posts/2021-07/1627512332_30-kartinkin-com-p-step-tekstura-krasivo-32.png")
+            no-repeat center center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
+  backdrop-filter: blur(5px);
   overflow-y: hidden;
   font-size: 130%;
   font-weight: 300;

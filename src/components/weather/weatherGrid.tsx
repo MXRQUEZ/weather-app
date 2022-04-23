@@ -13,13 +13,13 @@ const WeatherGrid: FC<IWeatherGridProps> = ({ weather }) => {
       <li className={classes.today}>
         <i className={picture[weather.week[0].weather].icon} />
         <div>
-          <span className={classes.dayname}>{weather.week[0].dayname}</span>
+          <span className={classes.dayname}>Today</span>
           <p>{weather.week[0].temp}°C</p>
         </div>
       </li>
       {weather.week.slice(1).map((daily) => {
         return (
-          <li key={daily.id}>
+          <li className={classes.other__days} key={daily.id}>
             <div>
               <span className={classes.dayname}>
                 {daily.dayname.slice(0, 3)}
@@ -34,4 +34,4 @@ const WeatherGrid: FC<IWeatherGridProps> = ({ weather }) => {
   );
 };
 
-export default WeatherGrid;
+export default React.memo(WeatherGrid);

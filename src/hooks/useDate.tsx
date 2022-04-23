@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const useDate = () => {
+const useDate = (timeZone: string) => {
   const locale = "en";
   const [today, setDate] = useState(new Date());
 
@@ -19,12 +19,15 @@ const useDate = () => {
   })} ${today.getFullYear()}`;
 
   const time = today.toLocaleTimeString(locale, {
+    timeZone,
     hour: "numeric",
     hour12: true,
     minute: "numeric",
   });
 
-  return [date, time];
+  const hours = today.getHours();
+
+  return [date, time, hours];
 };
 
 export default useDate;
