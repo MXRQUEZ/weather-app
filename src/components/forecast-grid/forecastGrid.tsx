@@ -1,13 +1,13 @@
 import React, { FC } from "react";
 import { picture } from "../../constants/constants";
 import { IWeather } from "../../types/IWeather";
-import classes from "./weather.module.scss";
+import classes from "./forecastGrid.module.scss";
 
 interface IWeatherGridProps {
   weather: IWeather;
 }
 
-const WeatherGrid: FC<IWeatherGridProps> = ({ weather }) => {
+const ForecastGrid: FC<IWeatherGridProps> = ({ weather }) => {
   return (
     <ul className={classes.forecast__grid}>
       <li className={classes.today}>
@@ -34,4 +34,4 @@ const WeatherGrid: FC<IWeatherGridProps> = ({ weather }) => {
   );
 };
 
-export default React.memo(WeatherGrid);
+export default React.memo(ForecastGrid);

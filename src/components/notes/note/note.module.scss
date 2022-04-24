@@ -1,0 +1,57 @@
+.note {
+  display: flex;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 2em;
+  margin: 5px;
+  flex-direction: row;
+  align-content: stretch;
+
+  &__text {
+    background-color: rgba(0, 0, 0, 0);
+    margin: 0 0 0 1em;
+    border: 1px solid rgba(0, 0, 0, 0);
+    color: white;
+    font-size: 1rem;
+    padding: 5px 0;
+    transition: 0.5s all ease;
+
+    &:hover,
+    &:focus {
+      outline: none;
+      border-bottom: 1px solid white;
+    }
+  }
+
+  &__time {
+    -webkit-appearance: none;
+    background-color: rgba(0, 0, 0, 0);
+    outline: none;
+    border: none;
+    font-family: "Roboto Thin", sans-serif;
+    border-right: 1px solid white;
+    color: white;
+    min-width: 3.5rem;
+    text-align: center;
+    font-size: 0.85rem;
+    transition: 0.5s all ease;
+
+    &:hover,
+    &:focus {
+      background-color: rgba(0, 0, 0, 0.3);
+      border-radius: 2em;
+    }
+  }
+
+  &__delete {
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    background-color: transparent;
+    cursor: pointer;
+    transition: 0.3s all;
+    margin: 0 1em 0 0;
+
+    &:hover {
+      color: #495057;
+    }
+  }
+}

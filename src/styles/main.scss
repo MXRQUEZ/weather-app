@@ -84,3 +84,12 @@ p {
   color: white;
   margin: 10px 10px;
 }
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+  display: none;
+}
+
+::selection {
+  background: #809778;
+  color: #fff;
+}

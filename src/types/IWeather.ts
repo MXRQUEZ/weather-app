@@ -4,4 +4,6 @@ export interface IWeather {
   city: string;
   country: string;
   week: IDaily[];
+  timezone: string;
+  bg: string;
 }

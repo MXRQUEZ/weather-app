@@ -1,12 +1,12 @@
 import React, { FC, useEffect, useState } from "react";
-import WeatherGrid from "./weatherGrid";
+import WeatherGrid from "../forecast-grid/forecastGrid";
 import { picture } from "../../constants/constants";
 import { IWeather } from "../../types/IWeather";
 import useDate from "../../hooks/useDate";
 import classes from "./weather.module.scss";
-import WeatherCalendar from "./weatherCalendar";
 import WeatherSearchbar from "../forms/weather-searchbar/weatherSearchbar";
-import getWeather from "../../utils/getWeather";
+import { getWeatherByCity, getWeatherByIP } from "../../utils/weatherHelpers";
+import Notes from "../notes/notes";
 
 const Weather: FC = () => {
   const [image, setImage] = useState<string>(picture.sun.background);
@@ -16,21 +16,34 @@ const Weather: FC = () => {
   const [timeZone, setTimeZone] = useState<string>("Europe/Minsk");
   const [date, time, hour] = useDate(timeZone);
 
+  const onEnterSearchCity = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      (async () => {
+        const cityName = event.currentTarget.value;
+        const newWeather = await getWeatherByCity(event.currentTarget.value);
+        if (!newWeather) {
+          alert(`City with name ${cityName} was not found!`);
+          return;
+        }
+        setWeather(newWeather);
+        const { timezone, bg } = newWeather;
+        setTimeZone(timezone);
+        document.body.style.background = `url(${bg}) no-repeat center center`;
+        setImage(bg);
+      })();
+    }
+  };
+
   useEffect(() => {
     (async () => {
-      await window.navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          setLoading(true);
-          const { latitude, longitude } = position.coords;
-          const [newWeather, currentTimeZone, currentPicture] =
-            await getWeather(latitude, longitude);
-          setWeather(newWeather);
-          setTimeZone(currentTimeZone);
-          document.body.style.background = `url(${currentPicture}) no-repeat center center`;
-          setImage(currentPicture);
-          setLoading(false);
-        }
-      );
+      setLoading(true);
+      const newWeather = await getWeatherByIP();
+      setWeather(newWeather);
+      const { timezone, bg } = newWeather;
+      setTimeZone(timezone);
+      document.body.style.background = `url(${bg}) no-repeat center center`;
+      setImage(bg);
+      setLoading(false);
     })();
   }, [hour]);
 
@@ -50,12 +63,12 @@ const Weather: FC = () => {
             <h5>{date}</h5>
           </time>
           <div className={classes.geolocation__location}>
-            <WeatherSearchbar />
+            <WeatherSearchbar onKeyDown={onEnterSearchCity} />
             <h4>{weather?.city}</h4>
             <h6>{weather?.country}</h6>
           </div>
         </div>
-        <WeatherCalendar />
+        <Notes />
         {weather && <WeatherGrid weather={weather} />}
       </div>
     </div>

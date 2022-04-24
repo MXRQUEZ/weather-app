@@ -1,13 +1,24 @@
 import { ICountry } from "../types/ICountry";
+import { INote } from "../types/INote";
+import { convertStringToTime } from "../utils/timeParser";
 
 interface IApi {
   key: string;
-  base: string;
+  weather: string;
+  forecast: string;
+  geo: string;
+  ip: string;
+  geoIP: string;
 }
 
 export const api: IApi = {
   key: "ed271e8a6e265f1cef792b341632072a",
-  base: "https://api.openweathermap.org/data/2.5/",
+  weather: "https://api.openweathermap.org/data/2.5/weather",
+  forecast: "https://api.openweathermap.org/data/2.5/onecall",
+  geo: "http://api.openweathermap.org/geo/1.0/direct",
+  ip: "https://api.ipify.org?format=json",
+  geoIP:
+    "https://api.ipgeolocation.io/ipgeo-bulk?include=hostname&ip=8.8.8.8&apiKey=API_KEY",
 };
 
 interface IPicture {
@@ -40,7 +51,30 @@ export const picture: IPicture = {
       "https://wallup.net/wp-content/uploads/2016/01/260109-city-road-rain-wet-depth_of_field-lights-car-night-trees-worms_eye_view-shiny.jpg",
     icon: "wi wi-day-fog",
   },
+  snow: {
+    background:
+      "https://wallup.net/wp-content/uploads/2019/10/802035-city-bokeh-winter-snow-beauty.jpg",
+    icon: "wi wi-day-snow",
+  },
 };
+
+export const testNotes: INote[] = [
+  {
+    id: "id1",
+    time: convertStringToTime(`13:1`),
+    text: "wake up",
+  },
+  {
+    id: "id2",
+    time: convertStringToTime(`5:11`),
+    text: "Celebrate summer",
+  },
+  {
+    id: "id3",
+    time: convertStringToTime(`18:1`),
+    text: "Celebrate autumn",
+  },
+];
 
 export const countries: ICountry = {
   BD: "Bangladesh",

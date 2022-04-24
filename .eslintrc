@@ -26,6 +26,7 @@
   },
   "rules": {
     "linebreak-style": "off",
+    "no-alert": "off",
     "prettier/prettier": [
       "error",
       {
