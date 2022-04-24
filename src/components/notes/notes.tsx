@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
+import { v4 as getUniqueId } from "uuid";
 import { INote } from "../../types/INote";
 import classes from "./notes.module.scss";
 import { testNotes } from "../../constants/constants";
@@ -27,7 +28,11 @@ const Notes: FC = () => {
 
   const addNote = () => {
     const newNotes = [...notes];
-    newNotes.push({ time: convertStringToTime(""), text: "", id: "idd123" });
+    newNotes.push({
+      time: convertStringToTime(""),
+      text: "",
+      id: getUniqueId(),
+    });
     setNotes(newNotes);
   };
 
@@ -54,7 +59,6 @@ const Notes: FC = () => {
       {notes.length < 5 ? (
         <button type="button" className={classes.add__note} onClick={addNote}>
           <i className="fa-regular fa-square-plus fa-3x" />
-          {`  Add note`}
         </button>
       ) : null}
     </aside>
