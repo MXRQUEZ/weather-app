@@ -24,7 +24,7 @@ export const fetchForecast = async (
 };
 
 export const fetchCity = async (city: string): Promise<ICityResponse[]> => {
-  const cityUrl = `${api.geo}?q=${city}&appid=${api.key}`;
+  const cityUrl = `${api.direct}?q=${city}&appid=${api.key}`;
   const response = await axios.get<ICityResponse[]>(cityUrl);
   return response.data;
 };

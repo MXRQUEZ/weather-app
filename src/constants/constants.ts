@@ -8,6 +8,7 @@ interface IApi {
   forecast: string;
   geo: string;
   ip: string;
+  direct: string;
 }
 
 export const api: IApi = {
@@ -16,6 +17,7 @@ export const api: IApi = {
   forecast: "https://api.openweathermap.org/data/2.5/onecall",
   ip: "https://api.ipify.org?format=json",
   geo: "https://www.iplocate.io/api/lookup",
+  direct: "https://api.openweathermap.org/geo/1.0/direct",
 };
 
 interface IPicture {

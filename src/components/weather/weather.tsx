@@ -5,10 +5,10 @@ import { IWeather } from "../../types/IWeather";
 import useDate from "../../hooks/useDate";
 import classes from "./weather.module.scss";
 import WeatherSearchbar from "../forms/weather-searchbar/weatherSearchbar";
-import { getWeatherByCity } from "../../utils/weatherHelpers";
 import Notes from "../notes/notes";
 import { useAppDispatch, useTypedSelector } from "../../hooks/redux/redux";
 import { fetchForecastAction } from "../../store/actions/weatherActions";
+import { fetchLocationByCityAction } from "../../store/actions/geolocationActions";
 
 const Weather: FC = () => {
   const [image, setImage] = useState<string>(picture.sun.background);
@@ -16,31 +16,7 @@ const Weather: FC = () => {
   const [timeZone, setTimeZone] = useState<string>("Europe/Minsk");
   const [date, time, hour] = useDate(timeZone);
 
-  const onEnterSearchCity = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      (async () => {
-        const cityName = event.currentTarget.value;
-        const newWeather = await getWeatherByCity(event.currentTarget.value);
-        if (!newWeather) {
-          alert(`City with name ${cityName} was not found!`);
-          return;
-        }
-        setWeather(newWeather);
-        const { timezone, bg } = newWeather;
-        setTimeZone(timezone);
-        document.body.style.background = `url(${bg}) no-repeat center center`;
-        setImage(bg);
-        event.currentTarget.blur();
-      })();
-    }
-  };
-
-  const onClickSelect = (event: React.MouseEvent<HTMLInputElement>) => {
-    event.currentTarget.select();
-  };
-
   const dispatch = useAppDispatch();
-
   const {
     weather: currentWeather,
     error,
@@ -50,6 +26,18 @@ const Weather: FC = () => {
   const { ip, geolocation } = useTypedSelector(
     (state) => state.geolocationReducer
   );
+
+  const onEnterSearchCity = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      const cityName = event.currentTarget.value;
+      dispatch(fetchLocationByCityAction(cityName));
+      event.currentTarget.blur();
+    }
+  };
+
+  const onClickSelect = (event: React.MouseEvent<HTMLInputElement>) => {
+    event.currentTarget.select();
+  };
 
   useEffect(() => {
     if (geolocation) {
@@ -103,4 +91,4 @@ const Weather: FC = () => {
   );
 };
 
-export default Weather;
+export default React.memo(Weather);

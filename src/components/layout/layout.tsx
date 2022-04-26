@@ -14,13 +14,10 @@ const Layout: FC<ILayoutProps> = ({ children }) => {
 
   useEffect(() => {
     dispatch(fetchLocationByIPAction());
-  }, [dispatch]);
-
-  useEffect(() => {
     if (error) {
       alert(error);
     }
-  }, [error]);
+  }, [dispatch, error]);
 
   return <main>{isLoading ? <h1>Loading...</h1> : children}</main>;
 };
