@@ -7,27 +7,36 @@ import {
 import classes from "./note.module.scss";
 
 interface NoteProps {
-  note: INote;
+  noteInit: INote;
   deleteNote: (id: string) => void;
   updateNote: (updatedNote: INote) => void;
 }
 
-const Note: FC<NoteProps> = ({ note, updateNote, deleteNote }) => {
-  const [time, setTime] = useState<string>(convertTimeToString(note.time));
-  const [text, setText] = useState<string>(note.text);
+const Note: FC<NoteProps> = ({ noteInit, updateNote, deleteNote }) => {
+  const [note, setNote] = useState<INote>(noteInit);
 
   const onChangeText = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setText(event.target.value);
-    updateNote({ ...note, text });
+    setNote({ ...note, text: event.target.value });
   };
 
   const onChangeTime = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTime(event.target.value);
-    updateNote({ ...note, time: convertStringToTime(time) });
+    const time = convertStringToTime(event.target.value);
+    setNote({ ...note, time });
+  };
+
+  const onBlurInput = () => {
+    updateNote(note);
   };
 
   const clickDelete = () => {
     deleteNote(note.id);
+  };
+
+  const onEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      updateNote(note);
+      event.currentTarget.blur();
+    }
   };
 
   return (
@@ -35,15 +44,19 @@ const Note: FC<NoteProps> = ({ note, updateNote, deleteNote }) => {
       <input
         type="time"
         className={classes.note__time}
-        value={time}
+        value={convertTimeToString(note.time)}
         onChange={onChangeTime}
+        onBlur={onBlurInput}
+        onKeyDown={onEnter}
       />
       <input
         type="text"
         className={classes.note__text}
-        value={text}
+        value={note.text}
         maxLength={23}
         onChange={onChangeText}
+        onBlur={onBlurInput}
+        onKeyDown={onEnter}
       />
       <button
         type="button"

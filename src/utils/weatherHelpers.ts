@@ -3,20 +3,14 @@ import {
   fetchForecast,
   fetchGeolocationByIP,
   fetchIP,
-} from "../service/apiRequests";
+} from "../services/api";
 import { IWeather } from "../types/IWeather";
 import { countries, picture } from "../constants/constants";
 import { IDaily } from "../types/IDaily";
+import { IGeolocation } from "../types/IGeolocation";
 
-interface IGetWeatherOptions {
-  city: string;
-  country: string;
-  latitude: number;
-  longitude: number;
-}
-
-const getWeather = async (options: IGetWeatherOptions): Promise<IWeather> => {
-  const { city, country, latitude, longitude } = options;
+export const getWeather = async (params: IGeolocation): Promise<IWeather> => {
+  const { city, country, latitude, longitude } = params;
   const forecastResponse = await fetchForecast(latitude, longitude);
   const { daily: dailyResponse, timezone } = forecastResponse;
   const dailies = dailyResponse.slice(0, -1);
@@ -24,6 +18,8 @@ const getWeather = async (options: IGetWeatherOptions): Promise<IWeather> => {
   const weather: IWeather = {
     city,
     country,
+    latitude,
+    longitude,
     week: dailies.map((daily) => {
       const { dt } = daily;
       const temp = daily.temp.day.toFixed(0);

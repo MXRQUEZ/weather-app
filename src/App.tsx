@@ -1,13 +1,14 @@
 import React from "react";
 import "./styles/main.scss";
 import Weather from "./components/weather/weather";
+import Layout from "./components/layout/layout";
 
 const App = () => {
   return (
     <div className="app">
-      <main>
+      <Layout>
         <Weather />
-      </main>
+      </Layout>
     </div>
   );
 };

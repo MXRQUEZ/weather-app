@@ -8,17 +8,14 @@ interface IApi {
   forecast: string;
   geo: string;
   ip: string;
-  geoIP: string;
 }
 
 export const api: IApi = {
   key: "ed271e8a6e265f1cef792b341632072a",
   weather: "https://api.openweathermap.org/data/2.5/weather",
   forecast: "https://api.openweathermap.org/data/2.5/onecall",
-  geo: "http://api.openweathermap.org/geo/1.0/direct",
   ip: "https://api.ipify.org?format=json",
-  geoIP:
-    "https://api.ipgeolocation.io/ipgeo-bulk?include=hostname&ip=8.8.8.8&apiKey=API_KEY",
+  geo: "https://www.iplocate.io/api/lookup",
 };
 
 interface IPicture {

@@ -5,14 +5,14 @@ import { IWeather } from "../../types/IWeather";
 import useDate from "../../hooks/useDate";
 import classes from "./weather.module.scss";
 import WeatherSearchbar from "../forms/weather-searchbar/weatherSearchbar";
-import { getWeatherByCity, getWeatherByIP } from "../../utils/weatherHelpers";
+import { getWeatherByCity } from "../../utils/weatherHelpers";
 import Notes from "../notes/notes";
+import { useAppDispatch, useTypedSelector } from "../../hooks/redux/redux";
+import { fetchForecastAction } from "../../store/actions/weatherActions";
 
 const Weather: FC = () => {
   const [image, setImage] = useState<string>(picture.sun.background);
   const [weather, setWeather] = useState<IWeather | null>(null);
-  const [isLoading, setLoading] = useState<boolean>(false);
-
   const [timeZone, setTimeZone] = useState<string>("Europe/Minsk");
   const [date, time, hour] = useDate(timeZone);
 
@@ -30,22 +30,47 @@ const Weather: FC = () => {
         setTimeZone(timezone);
         document.body.style.background = `url(${bg}) no-repeat center center`;
         setImage(bg);
+        event.currentTarget.blur();
       })();
     }
   };
 
+  const onClickSelect = (event: React.MouseEvent<HTMLInputElement>) => {
+    event.currentTarget.select();
+  };
+
+  const dispatch = useAppDispatch();
+
+  const {
+    weather: currentWeather,
+    error,
+    isLoading,
+  } = useTypedSelector((state) => state.weatherReducer);
+
+  const { ip, geolocation } = useTypedSelector(
+    (state) => state.geolocationReducer
+  );
+
   useEffect(() => {
-    (async () => {
-      setLoading(true);
-      const newWeather = await getWeatherByIP();
-      setWeather(newWeather);
-      const { timezone, bg } = newWeather;
+    if (geolocation) {
+      dispatch(fetchForecastAction(geolocation));
+      console.log(geolocation);
+    }
+    if (error) {
+      alert(error);
+    }
+  }, [dispatch, geolocation, error]);
+
+  useEffect(() => {
+    if (currentWeather) {
+      setWeather(currentWeather);
+      const { timezone, bg } = currentWeather;
       setTimeZone(timezone);
       document.body.style.background = `url(${bg}) no-repeat center center`;
       setImage(bg);
-      setLoading(false);
-    })();
-  }, [hour]);
+      console.log(currentWeather);
+    }
+  }, [currentWeather, hour]);
 
   return isLoading ? (
     <h1>Loading...</h1>
@@ -63,7 +88,10 @@ const Weather: FC = () => {
             <h5>{date}</h5>
           </time>
           <div className={classes.geolocation__location}>
-            <WeatherSearchbar onKeyDown={onEnterSearchCity} />
+            <WeatherSearchbar
+              onKeyDown={onEnterSearchCity}
+              onClick={onClickSelect}
+            />
             <h4>{weather?.city}</h4>
             <h6>{weather?.country}</h6>
           </div>

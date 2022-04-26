@@ -1,8 +1,6 @@
-export interface IGeolocationResponse {
-  city: string;
-  country: string;
+import { IGeolocation } from "../IGeolocation";
+
+export interface IGeolocationResponse extends IGeolocation {
   country_code: string;
-  latitude: number;
-  longitude: number;
   time_zone: string;
 }

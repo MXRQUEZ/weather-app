@@ -3,9 +3,13 @@ import classes from "./searchbar.module.scss";
 
 interface IWeatherSearchbarProps {
   onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+  onClick?: (event: React.MouseEvent<HTMLInputElement>) => void;
 }
 
-const WeatherSearchbar: FC<IWeatherSearchbarProps> = ({ onKeyDown }) => {
+const WeatherSearchbar: FC<IWeatherSearchbarProps> = ({
+  onKeyDown,
+  onClick,
+}) => {
   return (
     <div className={classes.search__box}>
       <button className={classes.btn__search}>
@@ -16,6 +20,7 @@ const WeatherSearchbar: FC<IWeatherSearchbarProps> = ({ onKeyDown }) => {
         className={classes.search__input}
         placeholder="Search the city..."
         onKeyDown={onKeyDown}
+        onClick={onClick}
       />
     </div>
   );
@@ -23,6 +28,7 @@ const WeatherSearchbar: FC<IWeatherSearchbarProps> = ({ onKeyDown }) => {
 
 WeatherSearchbar.defaultProps = {
   onKeyDown: undefined,
+  onClick: undefined,
 };
 
 export default React.memo(WeatherSearchbar);

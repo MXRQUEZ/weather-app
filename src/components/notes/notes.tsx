@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useState } from "react";
 import { v4 as getUniqueId } from "uuid";
 import { INote } from "../../types/INote";
 import classes from "./notes.module.scss";
@@ -14,17 +14,13 @@ const Notes: FC = () => {
 
   const updateNote = (updatedNote: INote) => {
     const newNotes = [...notes];
-    let newNote = newNotes.find((note) => note.id === updatedNote.id);
+    const newNote = newNotes.find((note) => note.id === updatedNote.id);
     if (newNote) {
-      newNote = { ...newNote, ...updatedNote };
-      setNotes(newNotes);
-      console.log(newNote);
+      newNote.time = updatedNote.time;
+      newNote.text = updatedNote.text;
+      setNotes(newNotes.sort(datesSortCondition));
     }
   };
-
-  useEffect(() => {
-    setNotes(notes.sort(datesSortCondition));
-  }, [notes, notes.length]);
 
   const addNote = () => {
     const newNotes = [...notes];
@@ -34,6 +30,10 @@ const Notes: FC = () => {
       id: getUniqueId(),
     });
     setNotes(newNotes);
+  };
+
+  const checkLastNote = (allNotes: INote[]) => {
+    return allNotes[allNotes.length - 1]?.time.getTime();
   };
 
   const deleteNote = (id: string) => {
@@ -50,13 +50,13 @@ const Notes: FC = () => {
     <aside className={classes.notes}>
       {notes.sort(datesSortCondition).map((note) => (
         <Note
-          note={note}
+          noteInit={note}
           key={note.id}
           updateNote={updateNote}
           deleteNote={deleteNote}
         />
       ))}
-      {notes.length < 5 ? (
+      {notes.length < 5 && checkLastNote(notes) ? (
         <button type="button" className={classes.add__note} onClick={addNote}>
           <i className="fa-regular fa-square-plus fa-3x" />
         </button>
