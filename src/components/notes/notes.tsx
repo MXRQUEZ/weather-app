@@ -56,7 +56,7 @@ const Notes: FC = () => {
     localStorage.setItem(storageKey.notes, JSON.stringify(newNotes));
   };
 
-  const checkLastNote = (allNotes: INote[]) => {
+  const isLastNoteValid = (allNotes: INote[]) => {
     if (notes.length !== 0) {
       const note = allNotes[allNotes.length - 1];
       const time = note?.time;
@@ -86,7 +86,7 @@ const Notes: FC = () => {
           deleteNote={deleteNote}
         />
       ))}
-      {notes.length < 5 && checkLastNote(notes) ? (
+      {notes.length < 5 && isLastNoteValid(notes) ? (
         <button type="button" className={classes.add__note} onClick={addNote}>
           <i className="fa-regular fa-square-plus fa-3x" />
         </button>
