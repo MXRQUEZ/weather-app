@@ -49,7 +49,6 @@ const Weather: FC = () => {
   useEffect(() => {
     if (geolocation && !weather) {
       dispatch(fetchForecastAction(geolocation));
-      console.log(geolocation);
     }
   }, [dispatch, geolocation, weather]);
 
@@ -69,7 +68,6 @@ const Weather: FC = () => {
       setTimeZone(timezone);
       document.body.style.background = `url(${bg}) no-repeat center center`;
       setImage(bg);
-      console.log(weather);
     }
   }, [weather]);
 
