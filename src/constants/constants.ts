@@ -2,13 +2,20 @@ import { ICountry } from "../types/ICountry";
 import { INote } from "../types/INote";
 import { convertStringToTime } from "../utils/timeParser";
 
-export const api = {
+export const geolocationAPI = {
+  ip: "https://api.ipify.org?format=json",
+  geo: "https://www.iplocate.io/api/lookup",
+};
+
+export const openWeatherAPI = {
   key: "ed271e8a6e265f1cef792b341632072a",
   weather: "https://api.openweathermap.org/data/2.5/weather",
   forecast: "https://api.openweathermap.org/data/2.5/onecall",
-  ip: "https://api.ipify.org?format=json",
-  geo: "https://www.iplocate.io/api/lookup",
   direct: "https://api.openweathermap.org/geo/1.0/direct",
+};
+
+export const stormGlassAPI = {
+  key: "c08e71c6-c641-11ec-8f63-0242ac130002-c08e723e-c641-11ec-8f63-0242ac130002",
 };
 
 interface IPicture {
@@ -52,11 +59,11 @@ export const testNotes: INote[] = [
   {
     id: "id1",
     time: convertStringToTime(`13:1`),
-    text: "wake up",
+    text: "Wake up",
   },
   {
     id: "id2",
-    time: convertStringToTime(`5:11`),
+    time: convertStringToTime(`5:00`),
     text: "Celebrate summer",
   },
   {
@@ -69,6 +76,7 @@ export const testNotes: INote[] = [
 export const storageKey = {
   weather: "weather",
   geolocation: "geolocation",
+  notes: "notes",
 };
 
 export const countries: ICountry = {

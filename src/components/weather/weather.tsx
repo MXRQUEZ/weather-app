@@ -3,7 +3,7 @@ import WeatherGrid from "../forecast-grid/forecastGrid";
 import { picture } from "../../constants/constants";
 import useDate from "../../hooks/useDate";
 import classes from "./weather.module.scss";
-import WeatherSearchbar from "../forms/weather-searchbar/weatherSearchbar";
+import WeatherSearchbar from "../weather-searchbar/weatherSearchbar";
 import Notes from "../notes/notes";
 import { useAppDispatch, useTypedSelector } from "../../hooks/redux/redux";
 import { fetchForecastAction } from "../../store/actions/weatherActions";
@@ -18,6 +18,7 @@ const Weather: FC = () => {
   const [date, time, hour] = useDate(timeZone);
 
   const dispatch = useAppDispatch();
+  const { removeWeather } = weatherActions;
   const {
     weather,
     error: weatherError,
@@ -32,17 +33,15 @@ const Weather: FC = () => {
 
   const onEnterSearchCity = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
-      const cityName = event.currentTarget.value;
-      dispatch(fetchLocationByCityAction(cityName));
+      (async () => {
+        const cityName = event.currentTarget.value;
+        await dispatch(fetchLocationByCityAction(cityName));
+        dispatch(removeWeather());
+      })();
       event.currentTarget.blur();
     }
   };
 
-  const onClickSelect = (event: React.MouseEvent<HTMLInputElement>) => {
-    event.currentTarget.select();
-  };
-
-  const { removeWeather } = weatherActions;
   useEffect(() => {
     dispatch(removeWeather());
   }, [dispatch, removeWeather, hour]);
@@ -77,29 +76,28 @@ const Weather: FC = () => {
   return isWeatherLoading || isGeolocationLoading ? (
     <h1>Loading...</h1>
   ) : (
-    <div className={classes.weather}>
-      <img
-        className={classes.weather__bg}
-        src={image}
-        alt="weather background"
-      />
-      <div className={classes.weather__info}>
-        <div className={classes.geolocation}>
-          <time className={classes.geolocation__date}>
-            <h2>{time}</h2>
-            <h5>{date}</h5>
-          </time>
-          <div className={classes.geolocation__location}>
-            <WeatherSearchbar
-              onKeyDown={onEnterSearchCity}
-              onClick={onClickSelect}
-            />
-            <h4>{weather?.city}</h4>
-            <h6>{weather?.country}</h6>
+    <div className={classes.container}>
+      <div className={classes.weather}>
+        <img
+          className={classes.weather__bg}
+          src={image}
+          alt="weather background"
+        />
+        <div className={classes.weather__info}>
+          <div className={classes.geolocation}>
+            <time className={classes.geolocation__date}>
+              <h2>{time}</h2>
+              <h5>{date}</h5>
+            </time>
+            <div className={classes.geolocation__location}>
+              <WeatherSearchbar onKeyDown={onEnterSearchCity} />
+              <h4>{weather?.city}</h4>
+              <h6>{weather?.country}</h6>
+            </div>
           </div>
+          <Notes />
+          {weather && <WeatherGrid weather={weather} />}
         </div>
-        <Notes />
-        {weather && <WeatherGrid weather={weather} />}
       </div>
     </div>
   );

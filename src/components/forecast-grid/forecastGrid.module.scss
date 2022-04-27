@@ -1,9 +1,9 @@
 .forecast__grid {
   list-style: none;
-  padding: 5px;
-  display: grid;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
   background-color: rgba(45, 59, 102, 0.75);
-  grid-template-columns: 2fr repeat(6, 1fr);
 
   & .today {
     color: white;
@@ -21,7 +21,6 @@
   }
 
   & .other__days {
-    margin: 10px;
     display: flex;
     color: white;
     flex-direction: column;
@@ -42,5 +41,17 @@
     padding: 2px 10px;
     border-radius: 2em;
     letter-spacing: 1.5px;
+  }
+}
+
+@media (max-width: 992px) {
+  .today {
+    width: 100%;
+  }
+  .forecast__grid {
+    justify-content: center;
+  }
+  .other__days {
+    flex-basis: 28%;
   }
 }

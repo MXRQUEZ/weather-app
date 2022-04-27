@@ -21,14 +21,15 @@ export const fetchLocationByIPAction = createAsyncThunk<IGeolocation, void>(
 
 export const fetchLocationByCityAction = createAsyncThunk<IGeolocation, string>(
   "fetchLocationByCity",
-  async (city, thunkAPI) => {
+  async (cityName, thunkAPI) => {
     try {
-      const cityResponse = await fetchCity(city);
+      const cityResponse = await fetchCity(cityName);
       if (!cityResponse.length) {
-        const errorMsg = `City with name ${city} was not found`;
+        const errorMsg = `City with name ${cityName} was not found`;
         throw new Error(errorMsg);
       }
       const {
+        name: city,
         lat: latitude,
         lon: longitude,
         country: countryCode,

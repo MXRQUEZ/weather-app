@@ -15,24 +15,19 @@ interface NoteProps {
 const Note: FC<NoteProps> = ({ noteInit, updateNote, deleteNote }) => {
   const [note, setNote] = useState<INote>(noteInit);
 
-  const onChangeText = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeText = (event: React.ChangeEvent<HTMLInputElement>) =>
     setNote({ ...note, text: event.target.value });
-  };
 
   const onChangeTime = (event: React.ChangeEvent<HTMLInputElement>) => {
     const time = convertStringToTime(event.target.value);
     setNote({ ...note, time });
   };
 
-  const onBlurInput = () => {
-    updateNote(note);
-  };
+  const onBlurUpdate = () => updateNote(note);
 
-  const clickDelete = () => {
-    deleteNote(note.id);
-  };
+  const onClickDelete = () => deleteNote(note.id);
 
-  const onEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const onEnterUpdate = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       updateNote(note);
       event.currentTarget.blur();
@@ -46,8 +41,8 @@ const Note: FC<NoteProps> = ({ noteInit, updateNote, deleteNote }) => {
         className={classes.note__time}
         value={convertTimeToString(note.time)}
         onChange={onChangeTime}
-        onBlur={onBlurInput}
-        onKeyDown={onEnter}
+        onBlur={onBlurUpdate}
+        onKeyDown={onEnterUpdate}
       />
       <input
         type="text"
@@ -55,13 +50,13 @@ const Note: FC<NoteProps> = ({ noteInit, updateNote, deleteNote }) => {
         value={note.text}
         maxLength={23}
         onChange={onChangeText}
-        onBlur={onBlurInput}
-        onKeyDown={onEnter}
+        onBlur={onBlurUpdate}
+        onKeyDown={onEnterUpdate}
       />
       <button
         type="button"
         className={classes.note__delete}
-        onClick={clickDelete}
+        onClick={onClickDelete}
       >
         <i className="fa-solid fa-trash" />
       </button>

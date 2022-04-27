@@ -60,6 +60,7 @@ export const geolocationSlice = createSlice({
       state.isLoading = false;
       state.geolocation = action.payload;
       state.error = "";
+      setStorageItem(storageKey.geolocation, JSON.stringify(action.payload));
     },
     [fetchLocationByCityAction.rejected.type]: (
       state,

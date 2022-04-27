@@ -56,3 +56,15 @@
     }
   }
 }
+
+@media (max-width: 992px) {
+  .note__text {
+    width: 70vw;
+  }
+}
+
+@media (max-width: 767px) {
+  .note__text {
+    width: 60vw;
+  }
+}

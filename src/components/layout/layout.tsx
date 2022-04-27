@@ -11,6 +11,7 @@ import { getStorageItem } from "../../utils/storageHelper";
 interface ILayoutProps {
   children: JSX.Element;
 }
+
 const Layout: FC<ILayoutProps> = ({ children }) => {
   const dispatch = useAppDispatch();
   const { initGeolocation } = geolocationActions;

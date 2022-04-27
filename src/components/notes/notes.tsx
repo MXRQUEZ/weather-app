@@ -1,16 +1,37 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { v4 as getUniqueId } from "uuid";
 import { INote } from "../../types/INote";
 import classes from "./notes.module.scss";
-import { testNotes } from "../../constants/constants";
+import { storageKey } from "../../constants/constants";
 import {
   convertStringToTime,
   datesSortCondition,
 } from "../../utils/timeParser";
 import Note from "./note/note";
 
+interface IStorageNote {
+  id: string;
+  time: string;
+  text: string;
+}
+
 const Notes: FC = () => {
-  const [notes, setNotes] = useState<INote[]>(testNotes);
+  const [notes, setNotes] = useState<INote[]>([]);
+
+  useEffect(() => {
+    const storageNotesStr = localStorage.getItem(storageKey.notes);
+    if (storageNotesStr) {
+      const storageNotes: IStorageNote[] = JSON.parse(storageNotesStr);
+      const validNotes: INote[] = storageNotes.map((note) => {
+        return {
+          id: note.id,
+          time: new Date(note.time),
+          text: note.text,
+        };
+      });
+      setNotes(validNotes);
+    }
+  }, []);
 
   const updateNote = (updatedNote: INote) => {
     const newNotes = [...notes];
@@ -18,22 +39,29 @@ const Notes: FC = () => {
     if (newNote) {
       newNote.time = updatedNote.time;
       newNote.text = updatedNote.text;
-      setNotes(newNotes.sort(datesSortCondition));
+      const sortedNotes = newNotes.sort(datesSortCondition);
+      setNotes(sortedNotes);
+      localStorage.setItem(storageKey.notes, JSON.stringify(sortedNotes));
     }
   };
 
   const addNote = () => {
     const newNotes = [...notes];
     newNotes.push({
-      time: convertStringToTime(""),
+      time: convertStringToTime(":"),
       text: "",
       id: getUniqueId(),
     });
     setNotes(newNotes);
+    localStorage.setItem(storageKey.notes, JSON.stringify(newNotes));
   };
 
   const checkLastNote = (allNotes: INote[]) => {
-    return allNotes[allNotes.length - 1]?.time.getTime();
+    if (notes.length !== 0) {
+      const time = allNotes[allNotes.length - 1]?.time;
+      return time?.getHours() && time?.getMinutes();
+    }
+    return true;
   };
 
   const deleteNote = (id: string) => {
@@ -43,12 +71,13 @@ const Notes: FC = () => {
       const index = newNotes.indexOf(note);
       newNotes.splice(index, 1);
       setNotes(newNotes);
+      localStorage.setItem(storageKey.notes, JSON.stringify(newNotes));
     }
   };
 
   return (
     <aside className={classes.notes}>
-      {notes.sort(datesSortCondition).map((note) => (
+      {notes.map((note) => (
         <Note
           noteInit={note}
           key={note.id}
