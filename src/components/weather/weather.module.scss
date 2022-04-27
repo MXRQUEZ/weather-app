@@ -6,8 +6,9 @@
     position: relative;
 
     &__bg {
-      height: 800px;
-      width: 1200px;
+      height: 750px;
+      width: 75vw;
+      overflow: hidden;
       object-fit: cover;
       box-shadow: 20px 20px 100px black;
       pointer-events: none;
@@ -47,12 +48,6 @@
         }
       }
     }
-  }
-}
-@media (max-width: 1200px) {
-  .weather__bg {
-    max-width: 1000px;
-    max-height: 675px;
   }
 }
 
