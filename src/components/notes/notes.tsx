@@ -58,8 +58,9 @@ const Notes: FC = () => {
 
   const checkLastNote = (allNotes: INote[]) => {
     if (notes.length !== 0) {
-      const time = allNotes[allNotes.length - 1]?.time;
-      return time?.getHours() && time?.getMinutes();
+      const note = allNotes[allNotes.length - 1];
+      const time = note?.time;
+      return time?.getHours() || time?.getMinutes() || note?.text;
     }
     return true;
   };
