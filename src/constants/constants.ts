@@ -2,16 +2,7 @@ import { ICountry } from "../types/ICountry";
 import { INote } from "../types/INote";
 import { convertStringToTime } from "../utils/timeParser";
 
-interface IApi {
-  key: string;
-  weather: string;
-  forecast: string;
-  geo: string;
-  ip: string;
-  direct: string;
-}
-
-export const api: IApi = {
+export const api = {
   key: "ed271e8a6e265f1cef792b341632072a",
   weather: "https://api.openweathermap.org/data/2.5/weather",
   forecast: "https://api.openweathermap.org/data/2.5/onecall",
@@ -74,6 +65,11 @@ export const testNotes: INote[] = [
     text: "Celebrate autumn",
   },
 ];
+
+export const storageKey = {
+  weather: "weather",
+  geolocation: "geolocation",
+};
 
 export const countries: ICountry = {
   BD: "Bangladesh",

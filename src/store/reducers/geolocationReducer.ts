@@ -6,16 +6,16 @@ import {
   fetchLocationByCityAction,
   fetchLocationByIPAction,
 } from "../actions/geolocationActions";
+import { storageKey } from "../../constants/constants";
+import { setStorageItem } from "../../utils/storageHelper";
 
 interface IGeolocationState {
-  ip: string;
   geolocation: IGeolocation | null;
   isLoading: boolean;
   error: string;
 }
 
 const initialGeolocationState: IGeolocationState = {
-  ip: "",
   geolocation: null,
   isLoading: false,
   error: "",
@@ -24,7 +24,11 @@ const initialGeolocationState: IGeolocationState = {
 export const geolocationSlice = createSlice({
   name: "geolocation",
   initialState: initialGeolocationState,
-  reducers: {},
+  reducers: {
+    initGeolocation(state, action: PayloadAction<IGeolocation>) {
+      state.geolocation = action.payload;
+    },
+  },
   extraReducers: {
     [fetchLocationByIPAction.pending.type]: (state) => {
       state.isLoading = true;
@@ -35,7 +39,8 @@ export const geolocationSlice = createSlice({
     ) => {
       state.isLoading = false;
       state.geolocation = action.payload;
-      state.ip = action.payload.ip!;
+      state.error = "";
+      setStorageItem(storageKey.geolocation, JSON.stringify(action.payload));
     },
     [fetchLocationByIPAction.rejected.type]: (
       state,
@@ -54,6 +59,7 @@ export const geolocationSlice = createSlice({
     ) => {
       state.isLoading = false;
       state.geolocation = action.payload;
+      state.error = "";
     },
     [fetchLocationByCityAction.rejected.type]: (
       state,

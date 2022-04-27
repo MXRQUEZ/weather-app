@@ -3,6 +3,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IWeather } from "../../types/IWeather";
 import { fetchForecastAction } from "../actions/weatherActions";
+import { storageKey } from "../../constants/constants";
+import { setStorageItem } from "../../utils/storageHelper";
 
 interface IWeatherState {
   weather: IWeather | null;
@@ -19,7 +21,14 @@ const initialWeatherState: IWeatherState = {
 export const weatherSlice = createSlice({
   name: "weather",
   initialState: initialWeatherState,
-  reducers: {},
+  reducers: {
+    initWeather(state, action: PayloadAction<IWeather>) {
+      state.weather = action.payload;
+    },
+    removeWeather(state) {
+      state.weather = null;
+    },
+  },
   extraReducers: {
     [fetchForecastAction.pending.type]: (state) => {
       state.isLoading = true;
@@ -30,6 +39,8 @@ export const weatherSlice = createSlice({
     ) => {
       state.isLoading = false;
       state.weather = action.payload;
+      state.error = "";
+      setStorageItem(storageKey.weather, JSON.stringify(action.payload));
     },
     [fetchForecastAction.rejected.type]: (
       state,

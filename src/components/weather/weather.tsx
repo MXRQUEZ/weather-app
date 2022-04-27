@@ -1,7 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
 import WeatherGrid from "../forecast-grid/forecastGrid";
 import { picture } from "../../constants/constants";
-import { IWeather } from "../../types/IWeather";
 import useDate from "../../hooks/useDate";
 import classes from "./weather.module.scss";
 import WeatherSearchbar from "../forms/weather-searchbar/weatherSearchbar";
@@ -9,23 +8,27 @@ import Notes from "../notes/notes";
 import { useAppDispatch, useTypedSelector } from "../../hooks/redux/redux";
 import { fetchForecastAction } from "../../store/actions/weatherActions";
 import { fetchLocationByCityAction } from "../../store/actions/geolocationActions";
+import { weatherActions } from "../../store/reducers/weatherReducer";
+import getWeatherState from "../../store/selectors/weatherSelector";
+import getGeolocationState from "../../store/selectors/geolocationSelector";
 
 const Weather: FC = () => {
   const [image, setImage] = useState<string>(picture.sun.background);
-  const [weather, setWeather] = useState<IWeather | null>(null);
   const [timeZone, setTimeZone] = useState<string>("Europe/Minsk");
   const [date, time, hour] = useDate(timeZone);
 
   const dispatch = useAppDispatch();
   const {
-    weather: currentWeather,
-    error,
-    isLoading,
-  } = useTypedSelector((state) => state.weatherReducer);
+    weather,
+    error: weatherError,
+    isLoading: isWeatherLoading,
+  } = useTypedSelector(getWeatherState);
 
-  const { ip, geolocation } = useTypedSelector(
-    (state) => state.geolocationReducer
-  );
+  const {
+    geolocation,
+    isLoading: isGeolocationLoading,
+    error: geolocationError,
+  } = useTypedSelector(getGeolocationState);
 
   const onEnterSearchCity = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
@@ -39,28 +42,39 @@ const Weather: FC = () => {
     event.currentTarget.select();
   };
 
+  const { removeWeather } = weatherActions;
   useEffect(() => {
-    if (geolocation) {
+    dispatch(removeWeather());
+  }, [dispatch, removeWeather, hour]);
+
+  useEffect(() => {
+    if (geolocation && !weather) {
       dispatch(fetchForecastAction(geolocation));
       console.log(geolocation);
     }
-    if (error) {
-      alert(error);
-    }
-  }, [dispatch, geolocation, error]);
+  }, [dispatch, geolocation, weather]);
 
   useEffect(() => {
-    if (currentWeather) {
-      setWeather(currentWeather);
-      const { timezone, bg } = currentWeather;
+    if (weatherError) {
+      alert(weatherError);
+      return;
+    }
+    if (geolocationError) {
+      alert(geolocationError);
+    }
+  }, [weatherError, geolocationError]);
+
+  useEffect(() => {
+    if (weather) {
+      const { timezone, bg } = weather;
       setTimeZone(timezone);
       document.body.style.background = `url(${bg}) no-repeat center center`;
       setImage(bg);
-      console.log(currentWeather);
+      console.log(weather);
     }
-  }, [currentWeather, hour]);
+  }, [weather]);
 
-  return isLoading ? (
+  return isWeatherLoading || isGeolocationLoading ? (
     <h1>Loading...</h1>
   ) : (
     <div className={classes.weather}>
@@ -91,4 +105,4 @@ const Weather: FC = () => {
   );
 };
 
-export default React.memo(Weather);
+export default Weather;

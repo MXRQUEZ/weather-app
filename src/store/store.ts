@@ -2,10 +2,12 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { weatherReducer } from "./reducers/weatherReducer";
 import { geolocationReducer } from "./reducers/geolocationReducer";
+import { notesReducer } from "./reducers/notesReducer";
 
 const rootReducer = combineReducers({
   geolocationReducer,
   weatherReducer,
+  notesReducer,
 });
 
 export const setupStore = () => {
