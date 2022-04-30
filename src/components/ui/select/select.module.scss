@@ -1,0 +1,28 @@
+.select__container {
+  display: grid;
+  background-color: rgba(45, 59, 102, 0.75);
+  grid-template-areas: "select";
+  position: relative;
+  width: fit-content;
+  padding: 5px;
+  border: 1px solid white;
+  cursor: pointer;
+  line-height: 1.1;
+
+  & .select {
+    background-color: transparent;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    width: fit-content;
+    color: white;
+    line-height: 1;
+    border-style: none;
+    outline: none;
+    cursor: pointer;
+
+    & option {
+      background: #191919;
+      font-size: 16px;
+    }
+  }
+}

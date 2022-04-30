@@ -1,7 +1,7 @@
 import React, { FC, useEffect } from "react";
 import { fetchLocationByIPAction } from "../../store/actions/geolocationActions";
 import { useAppDispatch } from "../../hooks/redux/redux";
-import { storageKey } from "../../constants/constants";
+import { openWeatherMap, storageKey } from "../../constants/constants";
 import { geolocationActions } from "../../store/reducers/geolocationReducer";
 import { IGeolocation } from "../../types/IGeolocation";
 import { weatherActions } from "../../store/reducers/weatherReducer";
@@ -15,21 +15,34 @@ interface ILayoutProps {
 const Layout: FC<ILayoutProps> = ({ children }) => {
   const dispatch = useAppDispatch();
   const { initGeolocation } = geolocationActions;
-  const { initWeather } = weatherActions;
+  const { initOpenWeather, initWeatherAPI } = weatherActions;
 
   useEffect(() => {
     const geolocationStorage = getStorageItem(storageKey.geolocation);
-    const weatherStorage = getStorageItem(storageKey.weather);
-    if (!geolocationStorage || !weatherStorage) {
+    if (!geolocationStorage) {
       dispatch(fetchLocationByIPAction());
       return;
     }
 
+    const selectedAPIStorage = localStorage.getItem(storageKey.selectedApi);
+    if (!selectedAPIStorage) {
+      localStorage.setItem(storageKey.selectedApi, openWeatherMap);
+    }
+
     const geolocation: IGeolocation = JSON.parse(geolocationStorage);
     dispatch(initGeolocation(geolocation));
-    const weather: IWeather = JSON.parse(weatherStorage);
-    dispatch(initWeather(weather));
-  }, [dispatch, initGeolocation, initWeather]);
+    const openWeatherStorage = getStorageItem(storageKey.openWeather);
+    if (openWeatherStorage) {
+      const openWeather: IWeather = JSON.parse(openWeatherStorage);
+      dispatch(initOpenWeather(openWeather));
+    }
+
+    const weatherAPIStorage = getStorageItem(storageKey.weatherApi);
+    if (weatherAPIStorage) {
+      const weatherAPI: IWeather = JSON.parse(weatherAPIStorage);
+      dispatch(initWeatherAPI(weatherAPI));
+    }
+  }, [dispatch, initGeolocation, initOpenWeather, initWeatherAPI]);
 
   return <main>{children}</main>;
 };

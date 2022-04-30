@@ -1,7 +1,7 @@
 // noinspection ExceptionCaughtLocallyJS
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchCity, fetchGeolocationByIP, fetchIP } from "../../services/api";
+import { fetchDirect, fetchGeolocationByIP, fetchIP } from "../../services/api";
 import { countries } from "../../constants/constants";
 import { IGeolocation } from "../../types/IGeolocation";
 
@@ -23,7 +23,7 @@ export const fetchLocationByCityAction = createAsyncThunk<IGeolocation, string>(
   "fetchLocationByCity",
   async (cityName, thunkAPI) => {
     try {
-      const cityResponse = await fetchCity(cityName);
+      const cityResponse = await fetchDirect(cityName);
       if (!cityResponse.length) {
         const errorMsg = `City with name ${cityName} was not found`;
         throw new Error(errorMsg);

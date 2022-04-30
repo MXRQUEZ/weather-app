@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import { fetchForecast } from "../services/api";
+import { fetchForecastOWM } from "../services/api";
 import { IWeather } from "../types/IWeather";
 import { picture } from "../constants/constants";
 import { IDaily } from "../types/IDaily";
@@ -7,7 +7,7 @@ import { IGeolocation } from "../types/IGeolocation";
 
 export const getWeather = async (params: IGeolocation): Promise<IWeather> => {
   const { city, country, latitude, longitude } = params;
-  const forecastResponse = await fetchForecast(latitude, longitude);
+  const forecastResponse = await fetchForecastOWM(latitude, longitude);
   const { daily: dailyResponse, timezone } = forecastResponse;
   const dailies = dailyResponse.slice(0, -1);
 

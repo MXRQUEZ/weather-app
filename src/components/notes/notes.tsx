@@ -17,6 +17,7 @@ interface IStorageNote {
 
 const Notes: FC = () => {
   const [notes, setNotes] = useState<INote[]>([]);
+  const MAX_NOTES = 3;
 
   useEffect(() => {
     const storageNotesStr = localStorage.getItem(storageKey.notes);
@@ -86,7 +87,7 @@ const Notes: FC = () => {
           deleteNote={deleteNote}
         />
       ))}
-      {notes.length < 5 && isLastNoteValid(notes) ? (
+      {notes.length < MAX_NOTES && isLastNoteValid(notes) ? (
         <button type="button" className={classes.add__note} onClick={addNote}>
           <i className="fa-regular fa-square-plus fa-3x" />
         </button>

@@ -14,8 +14,10 @@ export const openWeatherAPI = {
   direct: "https://api.openweathermap.org/geo/1.0/direct",
 };
 
-export const stormGlassAPI = {
-  key: "c08e71c6-c641-11ec-8f63-0242ac130002-c08e723e-c641-11ec-8f63-0242ac130002",
+export const weatherAPI = {
+  key: "32f9d543ee0042058e5124927223004",
+  forecast: "http://api.weatherapi.com/v1/forecast.json",
+  current: "http://api.weatherapi.com/v1/current.json",
 };
 
 interface IPicture {
@@ -74,10 +76,17 @@ export const testNotes: INote[] = [
 ];
 
 export const storageKey = {
-  weather: "weather",
+  openWeather: "openWeather",
+  weatherApi: "weatherApi",
   geolocation: "geolocation",
   notes: "notes",
+  selectedApi: "selectedAPI",
 };
+
+export const openWeatherMap = "OpenWeatherMap";
+export const otherAPI = "WeatherAPI";
+
+export const weatherOptions = [openWeatherMap, otherAPI];
 
 export const countries: ICountry = {
   BD: "Bangladesh",

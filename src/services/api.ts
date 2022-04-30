@@ -14,7 +14,7 @@ export const fetchWeather = async (
   return response.json();
 };
 
-export const fetchForecast = async (
+export const fetchForecastOWM = async (
   latitude: number,
   longitude: number
 ): Promise<IForecastResponse> => {
@@ -23,17 +23,21 @@ export const fetchForecast = async (
   return response.data;
 };
 
-export const fetchCity = async (city: string): Promise<ICityResponse[]> => {
-  const cityUrl = `${openWeatherAPI.direct}?q=${city}&appid=${openWeatherAPI.key}`;
-  const response = await axios.get<ICityResponse[]>(cityUrl);
+/*
+export const fetchForecastWAPI = async (
+  latitude: number,
+  longitude: number
+): Promise<IForecastResponse> => {
+  // const forecastUrl = `${weatherAPI.forecast}?key=${weatherAPI.key}&q=${latitude},${longitude}&days=10`;
+  const forecastUrl = `http://api.weatherstack.com/forecast?access_key=976691ea7a998ef947634bc6dd4c18ef&query=${latitude},${longitude}&forecast_days=7&units=m`;
+  const response = await axios.get<IForecastResponse>(forecastUrl);
   return response.data;
 };
+*/
 
-export const fetchWeatherByCity = async (
-  city: string
-): Promise<IForecastResponse> => {
-  const cityUrl = `${openWeatherAPI.weather}?q=${city}&units=metric&appid=${openWeatherAPI.key}`;
-  const response = await axios.get<IForecastResponse>(cityUrl);
+export const fetchDirect = async (city: string): Promise<ICityResponse[]> => {
+  const cityUrl = `${openWeatherAPI.direct}?q=${city}&appid=${openWeatherAPI.key}`;
+  const response = await axios.get<ICityResponse[]>(cityUrl);
   return response.data;
 };
 

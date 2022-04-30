@@ -1,26 +1,42 @@
 import React, { FC, useEffect, useState } from "react";
 import WeatherGrid from "../forecast-grid/forecastGrid";
-import { picture } from "../../constants/constants";
+import {
+  openWeatherMap,
+  otherAPI,
+  picture,
+  storageKey,
+  weatherOptions,
+} from "../../constants/constants";
 import useDate from "../../hooks/useDate";
 import classes from "./weather.module.scss";
 import WeatherSearchbar from "../weather-searchbar/weatherSearchbar";
 import Notes from "../notes/notes";
 import { useAppDispatch, useTypedSelector } from "../../hooks/redux/redux";
-import { fetchForecastAction } from "../../store/actions/weatherActions";
+import {
+  fetchForecastActionOWM,
+  fetchForecastActionWAPI,
+} from "../../store/actions/weatherActions";
 import { fetchLocationByCityAction } from "../../store/actions/geolocationActions";
 import { weatherActions } from "../../store/reducers/weatherReducer";
 import getWeatherState from "../../store/selectors/weatherSelector";
 import getGeolocationState from "../../store/selectors/geolocationSelector";
+import Select from "../ui/select/select";
+import { IWeather } from "../../types/IWeather";
 
 const Weather: FC = () => {
   const [image, setImage] = useState<string>(picture.sun.background);
   const [timeZone, setTimeZone] = useState<string>("Europe/Minsk");
+  const [currentAPI, setCurrentAPI] = useState<string>(
+    localStorage.getItem(storageKey.selectedApi)!
+  );
+  const [weather, setWeather] = useState<IWeather | null>(null);
   const [date, time, hour] = useDate(timeZone);
 
   const dispatch = useAppDispatch();
   const { removeWeather } = weatherActions;
   const {
-    weather,
+    openWeather,
+    weatherAPI,
     error: weatherError,
     isLoading: isWeatherLoading,
   } = useTypedSelector(getWeatherState);
@@ -30,6 +46,12 @@ const Weather: FC = () => {
     isLoading: isGeolocationLoading,
     error: geolocationError,
   } = useTypedSelector(getGeolocationState);
+
+  const onChangeGetOption = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const option = event.target.value;
+    localStorage.setItem(storageKey.selectedApi, option);
+    setCurrentAPI(option);
+  };
 
   const onEnterSearchCity = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
@@ -47,10 +69,34 @@ const Weather: FC = () => {
   }, [dispatch, removeWeather, hour]);
 
   useEffect(() => {
-    if (geolocation && !weather) {
-      dispatch(fetchForecastAction(geolocation));
+    if (currentAPI === openWeatherMap) {
+      setWeather(openWeather);
+      console.log(openWeather);
+      return;
     }
-  }, [dispatch, geolocation, weather]);
+
+    if (currentAPI === otherAPI) {
+      setWeather(weatherAPI);
+      console.log(weatherAPI);
+    }
+  }, [currentAPI, openWeather, weatherAPI]);
+
+  useEffect(() => {
+    if (!geolocation) {
+      return;
+    }
+
+    if (currentAPI === openWeatherMap && !openWeather) {
+      dispatch(fetchForecastActionOWM(geolocation));
+      console.log("openweather request");
+      return;
+    }
+
+    if (currentAPI === otherAPI && !weatherAPI) {
+      dispatch(fetchForecastActionWAPI(geolocation));
+      console.log("weatherAPI request");
+    }
+  }, [dispatch, geolocation, openWeather, weatherAPI, currentAPI]);
 
   useEffect(() => {
     if (weatherError) {
@@ -82,6 +128,13 @@ const Weather: FC = () => {
           alt="weather background"
         />
         <div className={classes.weather__info}>
+          <div className={classes.api__select}>
+            <Select
+              options={weatherOptions}
+              onChange={onChangeGetOption}
+              defaultValue={currentAPI || undefined}
+            />
+          </div>
           <div className={classes.geolocation}>
             <time className={classes.geolocation__date}>
               <h2>{time}</h2>
@@ -89,7 +142,7 @@ const Weather: FC = () => {
             </time>
             <div className={classes.geolocation__location}>
               <WeatherSearchbar onKeyDown={onEnterSearchCity} />
-              <h4>{weather?.city}</h4>
+              <h4>{weather?.city || "Not identified"}</h4>
               <h6>{weather?.country}</h6>
             </div>
           </div>

@@ -4,8 +4,21 @@ import { IGeolocation } from "../../types/IGeolocation";
 import { IWeather } from "../../types/IWeather";
 import { getWeather } from "../../utils/getWeather";
 
-export const fetchForecastAction = createAsyncThunk<IWeather, IGeolocation>(
-  "fetchForecast",
+export const fetchForecastActionOWM = createAsyncThunk<IWeather, IGeolocation>(
+  "fetchForecastOWM",
+  async (params, thunkAPI) => {
+    try {
+      return await getWeather(params);
+    } catch (error: unknown) {
+      const errorMsg =
+        "Error happened while attempting to get the forecast of your city.";
+      return thunkAPI.rejectWithValue(errorMsg);
+    }
+  }
+);
+
+export const fetchForecastActionWAPI = createAsyncThunk<IWeather, IGeolocation>(
+  "fetchForecastWAPI",
   async (params, thunkAPI) => {
     try {
       return await getWeather(params);
